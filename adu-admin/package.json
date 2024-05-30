@@ -1,18 +1,21 @@
 {
   "name": "adu-admin",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Backend for ADU Rental Platform",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "engines": {
+    "node": "20.x",
+    "npm": "10.x"
+  },
   "dependencies": {
-    "body-parser": "^1.20.2",
-    "express": "^4.19.2",
-    "mongoose": "^8.4.0"
-  }
+    "express": "^4.17.1",
+    "mongoose": "^5.12.3",
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0"
+  },
+  "author": "",
+  "license": "ISC"
 }
