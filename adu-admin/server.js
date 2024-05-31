@@ -7,9 +7,15 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
     .then(() => console.log('MongoDB connected'))
-    .catch(err => console.error('MongoDB connection error:', err));
+    .catch(err => {
+        console.error('MongoDB connection error:', err.message);
+        process.exit(1); // Exit process with failure
+    });
 
 const ListingSchema = new mongoose.Schema({
     title: String,
@@ -21,12 +27,13 @@ const Listing = mongoose.model('Listing', ListingSchema);
 
 app.get('/admin/pending-listings', async (req, res) => {
     try {
+        console.log('Fetching pending listings...');
         const listings = await Listing.find({ status: 'Pending Approval' });
+        console.log('Pending listings fetched:', listings);
         res.json(listings);
-        console.log('Fetched pending listings:', listings);
     } catch (error) {
-        console.error('Error fetching pending listings:', error);
-        res.status(500).send('Server error');
+        console.error('Error fetching pending listings:', error.message);
+        res.status(500).send('Server error: ' + error.message);
     }
 });
 
@@ -60,6 +67,7 @@ app.get('/', (req, res) => {
     res.send('Backend server is running');
 });
 
-app.listen(3000, () => {
-    console.log('Server running on port 3000');
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
